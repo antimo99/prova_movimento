@@ -35,7 +35,7 @@ int main (int argc, char **argv)
 
   // create the action client
   // true causes the client to spin its own thread
-  actionlib::SimpleActionClient<control_msgs::FollowJointTrajectoryAction> ac("follow_joint_trajectory", true);
+  actionlib::SimpleActionClient<control_msgs::FollowJointTrajectoryAction> ac("/position_joint_trajectory_controller/follow_joint_trajectory", true);
 
 
   /**
