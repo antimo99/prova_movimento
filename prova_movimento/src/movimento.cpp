@@ -59,7 +59,8 @@ int main (int argc, char **argv)
   ROS_INFO("Action server started, sending goal.");
   // send a goal to the action
   control_msgs::FollowJointTrajectoryActionGoal goal;
-  goal.header.stamp=ros::Time::now();
+  ros::Time delta(2.0);
+  goal.header.stamp=ros::Time::now()+delta;
   goal.goal.trajectory.joint_names=joint_names_;
 
   trajectory_msgs::JointTrajectory vec;
