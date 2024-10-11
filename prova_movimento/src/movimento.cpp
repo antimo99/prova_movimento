@@ -14,8 +14,8 @@ void messageCallback(const sensor_msgs::JointState::ConstPtr& msg)
     message_received = true;  // Imposta la variabile di stato
     if(message_received)
     {
-        //ROS_INFO("Configurazione iniziale letta: %s",q0.position.toString().c_str());
-        //q0.position.toString().c_str()
+        std::cout<<"posizione inziale";
+        std::cout<<q0;
     }
 }
 
@@ -35,7 +35,7 @@ int main (int argc, char **argv)
 
   // create the action client
   // true causes the client to spin its own thread
-  actionlib::SimpleActionClient<control_msgs::FollowJointTrajectoryAction> ac("action_client", true);
+  actionlib::SimpleActionClient<control_msgs::FollowJointTrajectoryAction> ac("/position_joint_trajectory_controller/follow_joint_trajectory", true);
 
 
   /**
@@ -59,6 +59,7 @@ int main (int argc, char **argv)
   ROS_INFO("Action server started, sending goal.");
   // send a goal to the action
   control_msgs::FollowJointTrajectoryActionGoal goal;
+  goal.header.stamp=ros::Time::now();
   goal.goal.trajectory.joint_names=joint_names_;
 
   trajectory_msgs::JointTrajectory vec;
@@ -66,6 +67,10 @@ int main (int argc, char **argv)
   vec.points[0].positions=q0.position;
   vec.points[1].positions={q0.position[0],q0.position[1],q0.position[2],q0.position[3],q0.position[4],q0.position[5],q0.position[6]+M_PI/2};
   goal.goal.trajectory.points=vec.points;
+  ros::Duration iniziale(0.0);
+  ros::Duration finale(15.0);
+  goal.goal.trajectory.points[0].time_from_start=iniziale ;
+  goal.goal.trajectory.points[0].time_from_start=finale;
   
   //invia la richiesta all'action_server
   ac.sendGoal(goal.goal);
